@@ -27,6 +27,7 @@ import com.hjt.service.ArticleService;
 import com.hjt.service.CommentService;
 import com.hjt.service.UserService;
 import com.hjt.util.LogUtils;
+import com.hjt.util.SensitiveWordFilter;
 import com.hjt.util.StringUtils;
 
 @Controller
@@ -41,6 +42,8 @@ public class ArticleController {
 	
 	@Autowired
 	private CommentService commentService;
+	
+	private SensitiveWordFilter filter = new SensitiveWordFilter();
 	
 	@RequestMapping("/list/{currentPage}")
 	public ModelAndView getArticlePageList(HttpSession session, @PathVariable("currentPage") int currentPage){
@@ -78,6 +81,7 @@ public class ArticleController {
 			map.put("data", "标题不能为空！");
 			return map;
 		}
+		content = filter.replaceSensitiveWord(content, 1, "*");
 		int result = articleService.addArticle(title, content, new Timestamp(new Date().getTime()), uid, lable);
 		if(result > 0){
 			LogUtils.info("发帖成功！标题：{}， 内容长度：{}", title, content.length());
@@ -117,6 +121,7 @@ public class ArticleController {
 			map.put("data", 1);
 			return map;
 		}
+		content = filter.replaceSensitiveWord(content, 1, "*");
 		int result = commentService.addFloorComment(aid, cid, uid, content);
 		if(result > 0){
 			LogUtils.info("楼中楼回复成功！内容：{}", content);

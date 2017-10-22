@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hjt.service.CommentService;
 import com.hjt.util.LogUtils;
+import com.hjt.util.SensitiveWordFilter;
 import com.hjt.util.StringUtils;
 
 @Controller
@@ -22,6 +23,8 @@ public class CommentController {
 	
 	@Autowired 
 	private CommentService commentService;
+	
+	private SensitiveWordFilter filter = new SensitiveWordFilter();
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	@ResponseBody
@@ -32,6 +35,7 @@ public class CommentController {
 			map.put("data", 0);
 			return map;
 		}
+		content = filter.replaceSensitiveWord(content, 1, "*");
 		int result = commentService.addComment(content, aid, uid, new Timestamp(new Date().getTime()));
 		if(result > 0){
 			map.put("data", 1);
