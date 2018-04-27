@@ -28,8 +28,8 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
-	public int addArticle(String title, String content, Timestamp timestamp, Integer aid, String label) {
-		return articleDao.addArticle(title, content, timestamp, aid, label);
+	public int addArticle(String title, String content, Timestamp timestamp, Integer aid, String label, String type) {
+		return articleDao.addArticle(title, content, timestamp, aid, label, type);
 	}
 
 	@Override
@@ -38,15 +38,20 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 
 	@Override
+	public List<Article> getArticleByPass(Integer pass) {
+		return articleDao.getArticleByPass(pass);
+	}
+	
+	@Override
 	public int deleteArticle(Integer aid) {
 		return articleDao.deleteArticleByID(aid);
 	}
 
 	@Override
-	public PageBean getArticlePageList(int currentPage, int pageSize) {
-		int count = articleDao.getArticleList().size();
+	public PageBean getArticlePageListByType(String type, int currentPage, int pageSize) {
+		int count = articleDao.getArticleListByType(type).size();
 		int totalPage = (int) Math.ceil(count * 1.0 / pageSize);
-		List<Article> list = articleDao.getArticlePageList((currentPage - 1) * pageSize, pageSize);
+		List<Article> list = articleDao.getArticlePageListByType(type, (currentPage - 1) * pageSize, pageSize);
 		PageBean pageBean = new PageBean(currentPage, pageSize, count, totalPage, list);
 		return pageBean;
 	}
@@ -61,4 +66,22 @@ public class ArticleServiceImpl implements ArticleService {
 		return articleDao.getArticleListByStatus(statusList);
 	}
 
+	@Override
+	public int updateArticleByID(Integer aid) {
+		return articleDao.updateArticleByID(aid);
+	}
+
+	@Override
+	public int updateArticleStatusByID(Integer aid, Integer status) {
+		return articleDao.updateArticleStatusByID(aid, status);
+	}
+
+	@Override
+	public PageBean getArticlePageList(int currentPage, int pageSize) {
+		int count = articleDao.getArticleList().size();
+		int totalPage = (int) Math.ceil(count * 1.0 / pageSize);
+		List<Article> list = articleDao.getArticlePageList((currentPage - 1) * pageSize, pageSize);
+		PageBean pageBean = new PageBean(currentPage, pageSize, count, totalPage, list);
+		return pageBean;
+	}
 }

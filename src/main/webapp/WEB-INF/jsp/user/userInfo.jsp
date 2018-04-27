@@ -10,9 +10,7 @@
 </head>
 <body>
 	<div class="container" style="box-shadow: 0px 0px 1px #888888">
-		<a href="${pageContext.request.contextPath }/index.jsp">
-			<img src="${pageContext.request.contextPath }/resources/imgs/logo.png" class="img-responsive" alt="广东工业大学"/>
-		</a><br>
+		<%@include file="../common/head.jsp" %><br>
 		<div class="row">
 			<div class="col-md-2">
 				<div class="info">
@@ -22,6 +20,31 @@
 			<div class="col-md-8">
 				<h3>ID: ${uInfo.uid }<br>昵称:${uInfo.username }</h3>
 			</div>
+		</div>
+		<div class="myArticle">
+			<c:choose>
+				<c:when test="${empty userArticle }">
+					<br><h3>未发表过任何帖子！</h3>
+				</c:when>
+				<c:otherwise>
+					<h3>发表过的帖子</h3>
+					<table class="table table-hover">
+						<c:forEach var="ua" items="${userArticle }">
+							<tr>
+								<td>
+									<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+									<a href="${pageContext.request.contextPath }/article/details/${ua.aid}">
+										<c:out value="${ua.title }"></c:out>
+									</a>
+									<div style="float:right;">
+										<fmt:formatDate value="${ua.date }" pattern="MM/dd HH:mm:ss"/>
+									</div>
+								</td>
+							</tr>
+						</c:forEach>
+					</table>
+				</c:otherwise>
+			</c:choose>
 		</div>
 		<%@include file="../common/foot.jsp" %>
 	</div>

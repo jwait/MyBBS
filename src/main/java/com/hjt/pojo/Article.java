@@ -16,7 +16,9 @@ public class Article implements Serializable{
 	private Date date;
 	private Integer uid;
 	private String lable;
-	private Integer status;// 置顶:1、加精:2、加精且置顶:3其他
+	private Integer status;// 1：置顶 2：加精 3：置顶且加精 0：无
+	private Integer pass;
+	private String type;
 	private User author;
 	public Integer getAid() {
 		return aid;
@@ -66,6 +68,18 @@ public class Article implements Serializable{
 	}
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+	public Integer getPass() {
+		return pass;
+	}
+	public void setPass(Integer pass) {
+		this.pass = pass;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

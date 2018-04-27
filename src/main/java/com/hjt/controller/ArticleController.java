@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,18 +44,22 @@ public class ArticleController {
 	@Autowired
 	private CommentService commentService;
 	
-	private SensitiveWordFilter filter = new SensitiveWordFilter();
+	private SensitiveWordFilter filter;
 	
-	@RequestMapping("/list/{currentPage}")
-	public ModelAndView getArticlePageList(HttpSession session, @PathVariable("currentPage") int currentPage){
+	@RequestMapping("/list/{type}/{currentPage}")
+	public ModelAndView getArticlePageList(HttpSession session, @PathVariable("type")String type, @PathVariable("currentPage") int currentPage){
 		ModelAndView modelAndView = new ModelAndView();
 		int pageSize = Config.DEFAULT_PAGESIZE;
-		modelAndView.addObject("articlePageBean", articleService.getArticlePageList(currentPage, pageSize));
-		
-		List<Integer> statusList = new ArrayList<>();
-		statusList.add(Config.STATUS_TOP);
-		statusList.add(Config.STATUS_TOP_HOT);
-		modelAndView.addObject("topArticle", articleService.getArticleByStatus(statusList));
+		if(type.equals("all")) {
+			modelAndView.addObject("articlePageBean", articleService.getArticlePageList(currentPage, pageSize));
+			List<Integer> statusList = new ArrayList<>();
+			statusList.add(Config.STATUS_TOP);
+			statusList.add(Config.STATUS_TOP_HOT);
+			modelAndView.addObject("topArticle", articleService.getArticleByStatus(statusList));
+		}else {
+			modelAndView.addObject("articlePageBean", articleService.getArticlePageListByType(type, currentPage, pageSize));
+		}
+		modelAndView.addObject("type", type);
 		
 		if(session.getAttribute("user") != null){
 			User user = (User) session.getAttribute("user");
@@ -64,28 +69,35 @@ public class ArticleController {
 		return modelAndView;
 	}
 	
+	
 	@RequestMapping(value="/add", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> addArticle(HttpSession session,
+	public Map<String, Integer> addArticle(HttpSession session, HttpServletRequest request,
 			@RequestParam(value = "title") String title,
 			@RequestParam(value = "content") String content,
 			@RequestParam(value = "uid") Integer uid,
-			@RequestParam(value = "lable") String lable){
-		Map<String, String> map = new HashMap<>();
+			@RequestParam(value = "lable") String lable,
+			@RequestParam(value = "type")String type){
+		Map<String, Integer> map = new HashMap<>();
 		User user = (User) session.getAttribute("user");
 		if(user == null){
-			map.put("data", "请登录后再重新发帖！");
+			map.put("data", 1);
 			return map;
 		}
 		if(StringUtils.isEmpty(title) || StringUtils.isBlank(title)){
-			map.put("data", "标题不能为空！");
+			map.put("data", 2);
 			return map;
 		}
+		if(StringUtils.isEmpty(content) || StringUtils.isBlank(content)){
+			map.put("data", 3);
+			return map;
+		}
+		filter = new SensitiveWordFilter(request);
 		content = filter.replaceSensitiveWord(content, 1, "*");
-		int result = articleService.addArticle(title, content, new Timestamp(new Date().getTime()), uid, lable);
+		int result = articleService.addArticle(title, content, new Timestamp(new Date().getTime()), uid, lable, type);
 		if(result > 0){
 			LogUtils.info("发帖成功！标题：{}， 内容长度：{}", title, content.length());
-			map.put("data", "发帖成功！");
+			map.put("data", 4);
 		}else{
 			LogUtils.info("发帖失败！");
 		}
@@ -106,7 +118,7 @@ public class ArticleController {
 	
 	@RequestMapping(value="/floor/add", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Integer> addFloorComment(HttpSession session,
+	public Map<String, Integer> addFloorComment(HttpSession session, HttpServletRequest request,
 			@RequestParam("cid")Integer cid, 
 			@RequestParam("aid")Integer aid,
 			@RequestParam("uid")Integer uid,
@@ -121,6 +133,7 @@ public class ArticleController {
 			map.put("data", 1);
 			return map;
 		}
+		filter = new SensitiveWordFilter(request);
 		content = filter.replaceSensitiveWord(content, 1, "*");
 		int result = commentService.addFloorComment(aid, cid, uid, content);
 		if(result > 0){
@@ -159,10 +172,96 @@ public class ArticleController {
 			LogUtils.info("删除成功！删除的帖子id为：{}", aid);
 		}else{
 			map.put("data", 2);
-			LogUtils.info("删除成功！删除的帖子id为：{}", aid);
+			LogUtils.info("删除失败！");
 		}
 		return map;
 	}
 	
+	@RequestMapping("/update/{aid}")
+	@ResponseBody
+	public Map<String, Integer> updateArticle(HttpSession session, 
+			@PathVariable("aid")Integer aid){
+		Map<String, Integer> map = new HashMap<>();
+		User user = (User) session.getAttribute("user");
+		if(user == null){
+			map.put("data", 0);
+			return map;
+		}
+		int result = articleService.updateArticleByID(aid);
+		if(result > 0){
+			map.put("data", 1);
+			LogUtils.info("通过成功！通过的帖子id为：{}", aid);
+		}else{
+			map.put("data", 2);
+			LogUtils.info("通过失败！");
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/stick/{aid}", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> stickArticle(HttpSession session,
+			@PathVariable("aid")Integer aid, @RequestParam("status")Integer status){
+		Map<String, Integer> map = new HashMap<>();
+		User user = (User) session.getAttribute("user");
+		if(user == null){
+			map.put("data", 0);
+			return map;
+		}
+		int result;
+		if(status == 1){
+			result = articleService.updateArticleStatusByID(aid, 0);
+			LogUtils.info("取消置顶成功！置顶的帖子id为：{}", aid);
+		}else if(status == 3) {
+			result = articleService.updateArticleStatusByID(aid, 2);
+			LogUtils.info("取消置顶成功！置顶的帖子id为：{}", aid);
+		}else if(status == 2){
+			result = articleService.updateArticleStatusByID(aid, 3);
+			LogUtils.info("置顶成功！置顶的帖子id为：{}", aid);
+		}else{
+			result = articleService.updateArticleStatusByID(aid, 1);
+			LogUtils.info("置顶成功！置顶的帖子id为：{}", aid);
+		}
+		if(result > 0){
+			map.put("data", 1);
+		}else{
+			map.put("data", 2);
+			LogUtils.info("置顶失败！");
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/digest/{aid}", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> digestArticle(HttpSession session,
+			@PathVariable("aid")Integer aid, @RequestParam("status")Integer status){
+		Map<String, Integer> map = new HashMap<>();
+		User user = (User) session.getAttribute("user");
+		if(user == null){
+			map.put("data", 0);
+			return map;
+		}
+		int result;
+		if(status == 2){
+			result = articleService.updateArticleStatusByID(aid, 0);
+			LogUtils.info("取消加精成功！加精的帖子id为：{}", aid);
+		}else if(status == 3) {
+			result = articleService.updateArticleStatusByID(aid, 1);
+			LogUtils.info("取消加精成功！加精的帖子id为：{}", aid);
+		}else if(status == 1){
+			result = articleService.updateArticleStatusByID(aid, 3);
+			LogUtils.info("加精成功！加精的帖子id为：{}", aid);
+		}else {
+			result = articleService.updateArticleStatusByID(aid, 2);
+			LogUtils.info("加精成功！加精的帖子id为：{}", aid);
+		}
+		if(result > 0){
+			map.put("data", 1);
+		}else{
+			map.put("data", 2);
+			LogUtils.info("加精失败！");
+		}
+		return map;
+	}
 	
 }

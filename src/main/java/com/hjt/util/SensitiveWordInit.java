@@ -10,12 +10,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 public class SensitiveWordInit {
 	private String ENCODING = "utf-8";    
 	@SuppressWarnings("rawtypes")
 	public HashMap sensitiveWordMap;
+	public HttpServletRequest request;
 	
+	public SensitiveWordInit(HttpServletRequest request) {
+		super();
+		this.request = request;
+	}
+
 	public SensitiveWordInit(){
 		super();
 	}
@@ -67,7 +75,8 @@ public class SensitiveWordInit {
 	private Set<String> readSensitiveWordFile() throws Exception{
 		Set<String> set = null;
 		
-		File file = new File("./sensitive/sensitiveWord.txt");    
+		String filePath = request.getSession().getServletContext().getRealPath("/");
+		File file = new File(filePath + "/sensitive/sensitiveWord.txt");    
 		InputStreamReader read = new InputStreamReader(new FileInputStream(file),ENCODING);
 		try {
 			if(file.isFile() && file.exists()){      

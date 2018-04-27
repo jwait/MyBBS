@@ -13,7 +13,20 @@ public class User implements Serializable{
 	private String username;
 	private String password;
 	private String headimg;
+	private Integer power;
 	
+	
+	public User(String username, String password, String headimg, Integer power) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.headimg = headimg;
+		this.power = power;
+	}
+
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	public Integer getUid() {
 		return uid;
@@ -38,6 +51,12 @@ public class User implements Serializable{
 	}
 	public void setHeadimg(String headimg) {
 		this.headimg = headimg;
+	}
+	public Integer getPower() {
+		return power;
+	}
+	public void setPower(Integer power) {
+		this.power = power;
 	}
 	
 }

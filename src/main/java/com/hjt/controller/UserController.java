@@ -39,47 +39,47 @@ public class UserController {
 	
 	@RequestMapping(value="/regist", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> regist(@RequestParam("username")String username, 
-			@RequestParam("password")String password){
-		Map<String, String> map = new HashMap<String, String>();
+	public Map<String, Integer> regist(@RequestParam("username")String username, 
+			@RequestParam("password")String password, HttpSession session){
+		Map<String, Integer> map = new HashMap<String, Integer>();
 		if(userService.findUser(username, null) != null){
-			map.put("data", "用户名已存在！");
+			map.put("data", 1);
 			return map;
 		}
 		String headimg = Config.DEFAULT_HEADIMG_ADDRESS;
-		int result = userService.addUser(username, StringUtils.MD5(password), headimg);
+		User user = new User(username, StringUtils.MD5(password), headimg, 2);
+		int result = userService.addUser(user);
 		if(result > 0){
 			LogUtils.info("注册成功！用户名：{}，密码：{}", username, password);
-			map.put("data", "注册成功，请重新登录！");
+			session.setAttribute("user", user);
+			map.put("data", 2);
 		} else{
 			LogUtils.info("注册失败！");
-			map.put("data", "注册失败！");
+			map.put("data", 3);
 		}
 		return map;
 	}
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> login(HttpSession session, 
+	public boolean login(HttpSession session, 
 			@RequestParam("username")String username,
 			@RequestParam("password")String password){
 		User user = userService.findUser(username, StringUtils.MD5(password));
-		Map<String, String> map = new HashMap<>();
 		if(user != null){
 			LogUtils.info("登录成功！用户名:{},密码：{}", username, password);
-			map.put("data", "登录成功！");
 			session.setAttribute("user", user);
+			return true;
 		}else{
 			LogUtils.info("登录失败！");
-			map.put("data", "登录失败！");
+			return false;
 		}
-		return map;
 	}
 	
 	@RequestMapping("/exit")
 	public String exit(HttpSession session){
 		session.invalidate();
-		return "redirect: /index.jsp";
+		return "redirect:/index.jsp";
 	}
 	
 	@RequestMapping("/manager/{uid}")
@@ -87,6 +87,13 @@ public class UserController {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = userService.getUserByID(uid);
 		List<Article> list = articleService.getArticleByUID(uid);
+		int power = userService.getPowerByUID(uid);
+		if(power == 1) {
+			List<Article> noPassList = articleService.getArticleByPass(0);
+			List<Article> passList = articleService.getArticleList();
+			modelAndView.addObject("noPassArticle", noPassList);
+			modelAndView.addObject("passArticle", passList);
+		}
 		modelAndView.addObject("u", user);
 		modelAndView.addObject("userArticle", list);
 		modelAndView.setViewName("user/userManager");
@@ -97,28 +104,39 @@ public class UserController {
 	public ModelAndView getUserInfo(@PathVariable("uid")Integer uid){
 		ModelAndView modelAndView = new ModelAndView();
 		User user = userService.getUserByID(uid);
+		List<Article> list = articleService.getArticleByUID(uid);
+		modelAndView.addObject("userArticle", list);
 		modelAndView.addObject("uInfo", user);
 		modelAndView.setViewName("user/userInfo");
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/update/{uid}",method=RequestMethod.POST)
+	@RequestMapping(value="/updatePassword",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Integer> updateUser(HttpSession session,
-			@PathVariable("uid")Integer uid, 
-			@RequestParam("password")String password){
+			@RequestParam("oldPassword")String oldPassword,
+			@RequestParam("newPassword")String newPassword){
 		Map<String, Integer> map = new HashMap<>();
 		User user = (User) session.getAttribute("user");
 		if(user == null){
 			map.put("data", 0);
 			return map;
 		}
-		int result = userService.updateUserInfo(StringUtils.MD5(password), uid);
-		if(result > 0){
+		int uid = user.getUid();
+		if(!user.getPassword().equals(StringUtils.MD5(oldPassword))){
 			map.put("data", 1);
+			return map;
+		}
+		if(user.getPassword().equals(StringUtils.MD5(newPassword))){
+			map.put("data", 2);
+			return map;
+		}
+		int result = userService.updateUserInfo(StringUtils.MD5(newPassword), uid);
+		if(result > 0){
+			map.put("data", 3);
 			LogUtils.info("更改密码成功的id为：{}", uid);
 		}else{
-			map.put("data", 2);
+			map.put("data", 4);
 			LogUtils.info("更改密码失败的id为：{}", uid);
 		}
 		return map;
@@ -136,6 +154,6 @@ public class UserController {
 		}else{
 			LogUtils.info("更新头像失败！");
 		}
-		return "redirect:/user/manager/uid";
+		return "redirect:/user/manager/"+uid;
 	}
 }

@@ -6,7 +6,7 @@ public class Config {
 	public static final String DEFAULT_HEADIMG_ADDRESS = "/resources/imgs/head.png";
 	
 	//默认头像上传地址
-	public static final String DEFAULT_UPLOAD_ADDRESS = "/resources/upload";
+	public static final String DEFAULT_UPLOAD_ADDRESS = "/resources/upload/";
 	
 	//默认分页大小
 	public static final int DEFAULT_PAGESIZE = 10;

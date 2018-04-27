@@ -5,10 +5,16 @@
 	href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>">
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/resources/css/mycss.css"/>">
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/resources/bootstrap/css/bootstrapValidator.min.css"/>">
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="bookmark" href="/favicon.ico"/>
 <script type="text/javascript"
 	src="<c:url value="/resources/bootstrap/js/jquery.min.js"/>"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/bootstrap/js/bootstrap.min.js"/>"></script>
+<script type="text/javascript" 
+	src="<c:url value="/resources/bootstrap/js/bootstrapValidator.min.js"/>"></script>
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery.nivo.slider.js"/>"></script>
 <style>

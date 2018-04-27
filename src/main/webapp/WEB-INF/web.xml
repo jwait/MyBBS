@@ -10,10 +10,14 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-	<error-page>
-		<error-code>*</error-code>
-		<location>/index.jsp</location>
-	</error-page>
+	<error-page>  
+        <error-code>404</error-code>  
+        <location>/WEB-INF/jsp/errors/error_404.jsp</location>  
+    </error-page>  
+    <error-page>  
+        <error-code>500</error-code>  
+        <location>/WEB-INF/jsp/errors/error_500.jsp</location>  
+    </error-page>
 
 	<!-- 编码过滤器 -->
 	<filter>
@@ -56,5 +60,10 @@
 		<servlet-name>springMVC</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+       <servlet-name>default</servlet-name>
+       <url-pattern>*.ico</url-pattern>
+    </servlet-mapping>
 
 </web-app>

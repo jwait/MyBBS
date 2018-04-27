@@ -9,10 +9,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="username" column="username"/>
 		<result property="password" column="password"/>
 		<result property="headimg" column="headimg"/>
+		<result property="power" column="power"/>
 	</resultMap>
 	
-	<insert id="addUser">
-		insert into user(username, password, headimg) values(#{username}, #{password}, #{headimg})
+	<select id="getPowerByUID" resultType="Integer">
+		select power from user where uid = #{uid} 
+	</select>
+	
+	<insert id="addUser" useGeneratedKeys="true" keyProperty="uid">
+		insert into user(username, password, headimg, power) values(#{username}, #{password}, #{headimg}, #{power})
 	</insert>
 	
 	<select id="findUser" resultMap="UserResult">

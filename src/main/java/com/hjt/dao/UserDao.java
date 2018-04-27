@@ -6,8 +6,9 @@ import com.hjt.pojo.User;
 
 public interface UserDao {
 	
-	public int addUser(@Param("username")String username, 
-			@Param("password") String password, @Param("headimg") String headimg);
+	public int getPowerByUID(@Param("uid")Integer uid);
+	
+	public int addUser(User user);
 	
 	public User findUser(@Param("username") String username,
 			@Param("password")String password);

@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author LJC
  * response输出工具类
  */
 public class ResponseUtils {

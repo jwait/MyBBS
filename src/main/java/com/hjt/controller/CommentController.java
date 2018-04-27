@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,17 +26,18 @@ public class CommentController {
 	@Autowired 
 	private CommentService commentService;
 	
-	private SensitiveWordFilter filter = new SensitiveWordFilter();
+	private SensitiveWordFilter filter;
 	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Integer> addComment(@RequestParam("content")String content,
-			@RequestParam("aid")Integer aid, @RequestParam("uid")Integer uid){
+			@RequestParam("aid")Integer aid, @RequestParam("uid")Integer uid, HttpServletRequest request){
 		Map<String, Integer> map = new HashMap<>();
 		if(StringUtils.isEmpty(content) || StringUtils.isBlank(content)){
 			map.put("data", 0);
 			return map;
 		}
+		filter = new SensitiveWordFilter(request);
 		content = filter.replaceSensitiveWord(content, 1, "*");
 		int result = commentService.addComment(content, aid, uid, new Timestamp(new Date().getTime()));
 		if(result > 0){

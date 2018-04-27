@@ -14,8 +14,8 @@ public class UserServiceImpl implements UserService{
 	private UserDao userDao;
 	
 	@Override
-	public int addUser(String username, String password, String headimg) {
-		return userDao.addUser(username, password, headimg);
+	public int addUser(User user) {
+		return userDao.addUser(user);
 	}
 
 	@Override
@@ -36,6 +36,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public int updateUserInfo(String password, Integer uid) {
 		return userDao.updateUserInfo(password, uid);
+	}
+
+	@Override
+	public int getPowerByUID(Integer uid) {
+		return userDao.getPowerByUID(uid);
 	}
 
 }
