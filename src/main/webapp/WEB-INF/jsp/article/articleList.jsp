@@ -322,7 +322,9 @@
 	            })
 	        }
 	    });
-	    
+	    function choose(data){
+	    	location.href = "${pageContext.request.contextPath }/article/list/"+ data.id + "/${articlePageBean.currentPage}";
+	    }
 	</script>
 	<input id="context" type="hidden" value="${pageContext.request.contextPath}" />
 	<%@include file="../common/editor.jsp"%>
