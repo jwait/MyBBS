@@ -23,6 +23,7 @@ import com.hjt.config.Config;
 import com.hjt.pojo.Article;
 import com.hjt.pojo.Comment;
 import com.hjt.pojo.Floor;
+import com.hjt.pojo.PageBean;
 import com.hjt.pojo.User;
 import com.hjt.service.ArticleService;
 import com.hjt.service.CommentService;
@@ -104,45 +105,17 @@ public class ArticleController {
 		return map;
 	}
 	
-	@RequestMapping("/details/{aid}")
-	public ModelAndView getArticleByID(@PathVariable("aid")Integer aid, HttpSession session){
+	@RequestMapping("/details/{aid}/{currentPage}")
+	public ModelAndView getArticleByID(@PathVariable("aid")Integer aid, @PathVariable("currentPage")Integer currentPage, HttpSession session){
 		ModelAndView modelAndView = new ModelAndView();
-		List<Comment> commentList = commentService.findComment(aid, null);
+		int pageSize = Config.DEFAULT_PAGESIZE;
+		PageBean commentPageBean = commentService.findComment(aid, null, currentPage, pageSize);
 		List<Floor> floorCommentList = commentService.findFloorComment(aid, null);
 		modelAndView.addObject("article", articleService.getArticleByID(aid));
-		modelAndView.addObject(commentList);
+		modelAndView.addObject("commentPageBean", commentPageBean);
 		modelAndView.addObject("Floor", floorCommentList);
 		modelAndView.setViewName("article/articleContent");
 		return modelAndView;
-	}
-	
-	@RequestMapping(value="/floor/add", method=RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Integer> addFloorComment(HttpSession session, HttpServletRequest request,
-			@RequestParam("cid")Integer cid, 
-			@RequestParam("aid")Integer aid,
-			@RequestParam("uid")Integer uid,
-			@RequestParam("content")String content){
-		Map<String, Integer> map = new HashMap<>();
-		User user = (User) session.getAttribute("user");
-		if(user == null || user.getUid() != uid){
-			map.put("data", 0);
-			return map;
-		}
-		if(StringUtils.isEmpty(content) || StringUtils.isBlank(content)){
-			map.put("data", 1);
-			return map;
-		}
-		filter = new SensitiveWordFilter(request);
-		content = filter.replaceSensitiveWord(content, 1, "*");
-		int result = commentService.addFloorComment(aid, cid, uid, content);
-		if(result > 0){
-			LogUtils.info("楼中楼回复成功！内容：{}", content);
-			map.put("data", 2);
-		}else{
-			LogUtils.info("回复失败！");
-		}
-		return map;
 	}
 	
 	@RequestMapping("/search")

@@ -12,7 +12,20 @@
 	<div class="container" style="box-shadow: 0px 0px 1px #888888">
 		<%@include file="./common/head.jsp" %>
 		<br><br>
-		<h4>查询关键字:"${key }",共查询到${fn:length(resultList) }篇帖子！</h4>
+		<div class="row">
+			<div class="col-md-8"><h4>查询关键字:"${key }",共查询到${fn:length(resultList) }篇帖子！</h4></div>
+			<div class="col-md-4">
+			<form class="navbar-form navbar-right" action="${pageContext.request.contextPath }/article/search" method="post" role="search" >
+				<div class="form-group">
+					<input type="text" name="key" class="form-control" placeholder="Search" value="${key }" maxlength="15"/>
+				</div>
+				<button type="submit" class="btn btn-default">
+					<span class="glyphicon glyphicon-search"></span>
+					搜索
+				</button>
+			</form>
+			</div>
+		</div>
 		<table class="table table-hover">
 			<c:forEach var="rl" items="${resultList }">
 				<tr>

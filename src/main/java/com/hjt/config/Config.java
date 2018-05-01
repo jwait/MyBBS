@@ -11,6 +11,9 @@ public class Config {
 	//默认分页大小
 	public static final int DEFAULT_PAGESIZE = 10;
 	
+	//默认回复分页大小
+	public static final int DEFAULY_FlOOR_PAGESIZE = 5;
+	
 	//置顶贴状态
 	public static final int STATUS_TOP = 1;
 	

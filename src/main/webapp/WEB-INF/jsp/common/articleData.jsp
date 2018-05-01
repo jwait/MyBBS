@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<a href="${pageContext.request.contextPath}/article/details/${t.aid }">
+<a href="${pageContext.request.contextPath}/article/details/${t.aid }/1"">
 	<c:out value="${t.title }"></c:out>
 </a>
-<div style="float: right;">
+<div style="float:right;">
 	<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 	<c:choose>
 		<c:when test="${t.author.uid eq user.uid }">

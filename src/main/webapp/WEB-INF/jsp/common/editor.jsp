@@ -1,6 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/wangEditor.css"/>">
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-1.9.0.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/wangEditor.js"/>"></script>
 <!-- <script src="https://raw.github.com/leizongmin/js-xss/master/dist/xss.js"></script> -->
 <script type="text/javascript">
@@ -19,6 +18,7 @@
        'fontfamily',
        'fontsize',
        'link',
+       'video',
        'fullscreen'
    ];
     editor.config.emotions = {

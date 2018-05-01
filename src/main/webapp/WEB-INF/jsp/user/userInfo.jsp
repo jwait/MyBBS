@@ -16,9 +16,7 @@
 				<div class="info">
 					<img alt="headimg" src="<c:url value="${uInfo.headimg }"/>" class="img-thumbnail"/>
 				</div>
-			</div>
-			<div class="col-md-8">
-				<h3>ID: ${uInfo.uid }<br>昵称:${uInfo.username }</h3>
+				<h4><center>用户名：${uInfo.username}</center></h4>
 			</div>
 		</div>
 		<div class="myArticle">
@@ -33,7 +31,7 @@
 							<tr>
 								<td>
 									<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-									<a href="${pageContext.request.contextPath }/article/details/${ua.aid}">
+									<a href="${pageContext.request.contextPath }/article/details/${ua.aid}/1">
 										<c:out value="${ua.title }"></c:out>
 									</a>
 									<div style="float:right;">

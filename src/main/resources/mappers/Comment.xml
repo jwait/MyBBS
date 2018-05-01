@@ -14,9 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<resultMap type="Floor" id="FloorResult">
 		<id property="fid" column="fid"/>
+		<result property="aid" column="aid"/>
 		<result property="cid" column="cid"/>
 		<result property="uid" column="uid"/>
 		<result property="content" column="content"/>
+		<result property="date" column="date" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
 		<association property="floorReplyer" column="uid" select="com.hjt.dao.UserDao.getUserByID"/>
 	</resultMap>
 	
@@ -31,8 +33,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			and aid = #{aid} 
 		</if>
 		<if test="uid!=null">
-			and uid = #{uid}
+			and uid = #{uid} 
 		</if>
+		order by date asc limit #{currentPage},#{pageSize}
 	</select>
 	
 	<select id="getCommentCount" resultType="java.lang.Integer">
@@ -40,16 +43,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="findFloorComment" resultMap="FloorResult">
-		select * from floor, user where floor.uid = user.uid 
+		select * from floor, user where floor.uid = user.uid  
 		<if test="aid!=null">
-			and aid = #{aid} 
+			and aid = #{aid}  
 		</if>
 		<if test="cid!=null">
-			and cid = #{cid}
+			and cid = #{cid} 
 		</if>
+		order by date asc
 	</select>
 	
-	<insert id="addFloorComment">
-		insert into floor(aid, cid, uid, content) values(#{aid}, #{cid}, #{uid}, #{content})
+	<insert id="addFloorComment" useGeneratedKeys="true" keyProperty="fid">
+		insert into floor(aid, cid, uid, content, date) values(#{aid}, #{cid}, #{uid}, #{content}, #{date})
 	</insert>
+	
+	<delete id="deleteFloorReplyByFid">
+		delete from floor where fid = #{fid}
+	</delete>
+	
+	<delete id="deleteCommentByCid">
+		delete from comment where cid = #{cid}
+	</delete>
 </mapper>

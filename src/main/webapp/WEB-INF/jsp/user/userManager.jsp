@@ -17,23 +17,33 @@
 					<div class="col-md-2">
 						<div class="info">
 							<img alt="headimg" src="<c:url value="${u.headimg }"/>" class="img-thumbnail"/>
-							<h4><center>名字：${u.username}</center></h4>
+							<h4><center>用户名：${u.username}</center></h4>
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-8">
+						<br>
 						<form id="changeImg" class="form-horizontal" action="${pageContext.request.contextPath }/user/headimg/${u.uid}" enctype="multipart/form-data" method="post">
 							<div class="form-group">
-								<label class="col-md-2 control-label" for="imgUpload">更换头像</label>
-								<div class="col-md-10">
+								<label class="col-md-2 control-label" for="imgUpload" style="font-size:16px;">更换头像</label>
+								<div class="col-md-5">
 									<input class="btn btn-link form-control" type="file" id="imgUpload" name="file" accept="image/*"/>
 								</div>
+								<div class="col-md-2">
+									<button class="btn btn-primary" type="submit">确认修改</button>
+								</div>
 							</div>
-							<button class="btn btn-success" type="submit">确认修改</button>
 						</form>
-						<!-- Button trigger modal -->
-						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-						  	修改密码
-						</button><br/><br/>
+						<form class="form-horizontal">
+							<div class="form-group">
+								<span class="col-md-2 control-label" style="font-size:16px;"><strong>修改密码</strong></span>
+								<div class="col-md-2">
+									<!-- Button trigger modal -->
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+									  	修改密码
+									</button>
+								</div>
+							</div>
+						</form>
 						<!-- Modal -->
 						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 							  <div class="modal-dialog" role="document">
@@ -87,7 +97,7 @@
 									<tr>
 										<td>
 											<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-											<a href="${pageContext.request.contextPath }/article/details/${ua.aid}">
+											<a href="${pageContext.request.contextPath }/article/details/${ua.aid}/1">
 												<c:out value="${ua.title }"></c:out>
 											</a>
 											<div style="float:right;">
@@ -137,7 +147,7 @@
 								<tr>
 									<td>
 										<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-										<a href="${pageContext.request.contextPath }/article/details/${pa.aid}">
+										<a href="${pageContext.request.contextPath }/article/details/${pa.aid}/1">
 											<c:out value="${pa.title }"></c:out>
 										</a>
 										<div style="float:right;">
@@ -166,8 +176,8 @@
 				</center>
 			</c:otherwise>
 		</c:choose>
+		<%@include file="../common/foot.jsp" %>
 	</div>
-<%@include file="../common/foot.jsp" %>
 <script type="text/javascript">
 
 	$(function() {
@@ -361,7 +371,7 @@
 		$.get("${pageContext.request.contextPath}/article/delete/"+aid, function(data){
 			if(data.data == 0){
 				$("#returnMessage3").hide().html('<label class="label label-danger">请重新登陆！</label>').show(300);
-				location.href = "${pageContext.request.contextPath}/article/list/1";
+				location.href = "${pageContext.request.contextPath}/article/list/all/1";
 			}else{
 				if(data.data == 1)
 					$("#returnMessage3").hide().html('<label class="label label-success">删除成功！</label>').show(300);
@@ -371,7 +381,6 @@
 					location.href = "${pageContext.request.contextPath}/user/manager/${u.uid}";
 				},500);
 			}
-			
 		},"json");
 	}
 	
