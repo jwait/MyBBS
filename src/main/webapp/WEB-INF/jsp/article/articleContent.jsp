@@ -57,7 +57,7 @@
 				
 				<%-- 评论列表 --%>
 				<c:forEach var="c" items="${commentPageBean.list }" varStatus="vs">
-					<div class="row"  style="box-shadow: 0px 0px 1px #888888">
+					<div class="row"  style="box-shadow: 0px 0px 1px #888888;">
 						<div class="panel panel-default" style="border-radius: 0;">
 							<div class="panel-body">
 								<div class="col-md-2" style="background-color:#f4f7f6;">

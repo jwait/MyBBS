@@ -31,7 +31,7 @@
 				<tr>
 					<td>
 						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-						<a href="${pageContext.request.contextPath }/article/details/${rl.aid}" target="_blank">
+						<a href="${pageContext.request.contextPath }/article/details/${rl.aid}/1" target="_blank">
 							<c:out value="${rl.title }"></c:out>
 						</a>
 						<div style="float: right;">

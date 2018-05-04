@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/resources/bootstrap/css/bootstrap.min.css"/>">
@@ -6,8 +7,8 @@
 	href="<c:url value="/resources/css/mycss.css"/>">
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/resources/bootstrap/css/bootstrapValidator.min.css"/>">
-<link rel="shortcut icon" href="/favicon.ico"/>
-<link rel="bookmark" href="/favicon.ico"/>
+<link rel="shortcut icon" href="<c:url value="/favicon.ico"/>">
+<link rel="bookmark" href="<c:url value="/favicon.ico"/>">
 <script type="text/javascript"
 	src="<c:url value="/resources/bootstrap/js/jquery.min.js"/>"></script>
 <script type="text/javascript"
