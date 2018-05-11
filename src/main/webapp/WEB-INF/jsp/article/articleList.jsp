@@ -140,65 +140,69 @@
 		</nav>
 		<div class="row" >
 			<div class="col-md-8">
-				<%-- 置顶的帖子 --%>
-				<c:forEach var="t" items="${topArticle }">
-					<div class="page-header">
-						<h4>
-							<span class="label label-primary">置顶</span>
-							<c:if test="${t.status eq 3 }">
-								<span class="label label-danger">精</span>
-							</c:if>
-							<%@include file="../common/articleData.jsp"%>
-					</div>
-				</c:forEach>
 				<c:choose>
-						<c:when test="${type eq 'all' or empty type }">
-							<%-- 未置顶的帖子 --%>
-							<c:forEach var="t" items="${articlePageBean.list }">
-								<c:if test="${t.status ne 1 and t.status ne 3 }">
-									<div class="page-header">
-										<h4>
-											<c:if test="${t.status eq 2 }">
-												<span class="label label-danger">精</span>
-											</c:if>
-											<%@include file="../common/articleData.jsp"%>
-									</div>
-								</c:if>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<c:forEach var="t" items="${articlePageBean.list }">
-								<div class="page-header">
-									<h4>
-										<c:if test="${t.status eq 2 or t.status eq 3}">
+					<c:when test="${articlePageBean.totalPage!=0 }">
+						<table class="table table-hover">
+							<tr>
+								<th class="col-md-9">标题/标签</th>
+								<th class="col-md-3">用户名/发帖日期</th>
+							</tr>
+							<%-- 置顶的帖子 --%>
+							<c:forEach var="t" items="${topArticle }">
+								<tr>
+									<td>
+										<span class="label label-primary">置顶</span>
+										<c:if test="${t.status eq 3 }">
 											<span class="label label-danger">精</span>
 										</c:if>
 										<%@include file="../common/articleData.jsp"%>
-								</div>
+									</td>
+								</tr>
 							</c:forEach>
-						</c:otherwise>
-					</c:choose>
-				<%-- 分页 --%>
-				<div>
-					<c:choose>
-						<c:when test="${articlePageBean.totalPage!=0 }">
-							<%-- <a href="${pageContext.request.contextPath }/article/list/${type}/${articlePageBean.currentPage==1?1:articlePageBean.currentPage-1}"> 上一页&nbsp; </a>
-						第${articlePageBean.currentPage }页/共${articlePageBean.totalPage}页&nbsp;
-							<a href="${pageContext.request.contextPath }/article/list/${type}/${articlePageBean.currentPage==articlePageBean.totalPage?articlePageBean.totalPage:articlePageBean.currentPage+1}"> 下一页 </a> --%>
-							<div id="example" style="text-align: center">  
-							    <ul id="pageLimit"></ul>  
-							</div>  
-						</c:when>
-						<c:otherwise>
-							未查到任何记录！
-						</c:otherwise>
-					</c:choose>
-				</div>
+							<c:choose>
+								<c:when test="${type eq 'all' or empty type }">
+									<%-- 未置顶的帖子 --%>
+									<c:forEach var="t" items="${articlePageBean.list }">
+										<c:if test="${t.status ne 1 and t.status ne 3 }">
+											<tr>
+												<td>
+													<c:if test="${t.status eq 2 }">
+														<span class="label label-danger">精</span>
+													</c:if>
+													<%@include file="../common/articleData.jsp"%>
+												</td>
+											</tr>
+										</c:if>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="t" items="${articlePageBean.list }">
+										<tr>
+											<td>
+												<c:if test="${t.status eq 2 or t.status eq 3}">
+													<span class="label label-danger">精</span>
+												</c:if>
+												<%@include file="../common/articleData.jsp"%>
+											</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
+						</table>
+						<%-- 分页 --%>
+						<div id="example" style="text-align: center">  
+						    <ul id="pageLimit"></ul>  
+						</div>
+					</c:when>
+					<c:otherwise>
+						未查到任何记录！
+					</c:otherwise>
+				</c:choose>
 				<%-- 发帖框 --%>
 				<c:choose>
 					<c:when test="${!empty user }">
 						<div style="padding-top: 100px;">
-							<input type="text" class="form-control" maxLength="50" id="title" placeholder="输入帖子标题" />
+							<input type="text" class="form-control" maxLength="20" id="title" placeholder="输入帖子标题" />
 							<div id="content" style="height: 240px;"></div>
 							<h5 style="float: left;">选择发帖的板块：</h5>
 							<select id="type" class="form-control" style="width:200px; float: left;">
@@ -256,8 +260,9 @@
 							<c:when test="${empty user }">
 								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle" data-toggle="modal" data-target="#myModal" />
 								<br />
-								<br />用户名：
-								<a href="javaScript.void(0);" data-toggle="modal" data-target="#myModal">未登录</a>
+								<br />
+								<a href="javaScript.void(0);" data-toggle="modal" data-target="#myModal">登录</a>&nbsp;|
+								<a href="#" data-toggle="modal" data-target="#myModal1">注册</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath }/user/manager/${user.uid }">

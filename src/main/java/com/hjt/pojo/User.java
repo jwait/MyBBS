@@ -12,14 +12,18 @@ public class User implements Serializable{
 	private Integer uid;
 	private String username;
 	private String password;
+	private String phone;
+	private String email;
 	private String headimg;
 	private Integer power;
 	
 	
-	public User(String username, String password, String headimg, Integer power) {
+	public User(String username, String password, String phone, String email, String headimg, Integer power) {
 		super();
 		this.username = username;
 		this.password = password;
+		this.phone = phone;
+		this.email = email;
 		this.headimg = headimg;
 		this.power = power;
 	}
@@ -57,6 +61,22 @@ public class User implements Serializable{
 	}
 	public void setPower(Integer power) {
 		this.power = power;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }

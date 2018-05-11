@@ -12,7 +12,7 @@ public interface UserService {
 	
 	public int updateHeadImg(String headImgName, Integer uid);
 	
-	public int updateUserInfo(String password, Integer uid);
+	public int updateUserInfo(String username, String password, String phone, String email, Integer uid);
 	
 	public int getPowerByUID(Integer uid);
 	

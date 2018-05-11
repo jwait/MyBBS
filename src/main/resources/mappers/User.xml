@@ -8,6 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<id property="uid" column="uid"/>
 		<result property="username" column="username"/>
 		<result property="password" column="password"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
 		<result property="headimg" column="headimg"/>
 		<result property="power" column="power"/>
 	</resultMap>
@@ -17,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="addUser" useGeneratedKeys="true" keyProperty="uid">
-		insert into user(username, password, headimg, power) values(#{username}, #{password}, #{headimg}, #{power})
+		insert into user(username, password, phone, email, headimg, power) values(#{username}, #{password}, #{phone}, #{email}, #{headimg}, #{power})
 	</insert>
 	
 	<select id="findUser" resultMap="UserResult">
@@ -36,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="updateUserInfo">
-		update user set password = #{password} where uid = #{uid}
+		update user set username = #{username}, password = #{password}, phone = #{phone}, email = #{email} where uid = #{uid}
 	</update>
 	
 </mapper>

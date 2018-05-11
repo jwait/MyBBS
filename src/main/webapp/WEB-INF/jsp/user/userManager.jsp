@@ -35,11 +35,11 @@
 						</form>
 						<form class="form-horizontal">
 							<div class="form-group">
-								<span class="col-md-2 control-label" style="font-size:16px;"><strong>修改密码</strong></span>
+								<span class="col-md-2 control-label" style="font-size:16px;"><strong>修改资料</strong></span>
 								<div class="col-md-2">
 									<!-- Button trigger modal -->
 									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-									  	修改密码
+									  	修改资料
 									</button>
 								</div>
 							</div>
@@ -50,14 +50,32 @@
 								  <div class="modal-content">
 							          <div class="modal-header">
 							          	  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								          <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+								          <h4 class="modal-title" id="myModalLabel">修改资料</h4>
 								      </div>
 								      <form id="changeMessage" class="form-horizontal" method="post" action="" enctype="multipart/form-data">  
 									  	  <div class="modal-body">
+									  	  	  <div class="form-group">  
+											      <label for="username" class="col-md-3 control-label">用户名：</label>  
+											      <div class="col-md-9">  
+											          <input class="form-control" type="text" name="username" id="username" placeholder="请输入用户名" value="${user.username }">  
+											      </div> 
+											  </div> 
+											  <div class="form-group">  
+											      <label for="phone" class="col-md-3 control-label">电话号码：</label>  
+											      <div class="col-md-9">  
+											          <input class="form-control" type="text" name="phone" id="phone" placeholder="请输入电话号码" value="${user.phone }">  
+											      </div> 
+											  </div> 
+									  	  	  <div class="form-group">  
+											      <label for="email" class="col-md-3 control-label">邮箱：</label>  
+											      <div class="col-md-9">  
+											          <input class="form-control" type="text" name="email" id="email" placeholder="请输入邮箱" value="${user.email }">  
+											      </div> 
+											  </div> 
 										      <div class="form-group">  
 											      <label for="oldPassword" class="col-md-3 control-label">用户旧密码：</label>  
 											      <div class="col-md-9">  
-											          <input class="form-control" type="password" name="oldPassword" id="oldPassword" placeholder="请输入旧密码">  
+											          <input class="form-control" type="text" name="oldPassword" id="oldPassword" placeholder="请输入旧密码">  
 											      </div> 
 											  </div> 
 											  <div class="form-group">  
@@ -93,6 +111,11 @@
 						<c:otherwise>
 							<h3>发表过的帖子</h3> <span id="returnMessage3" class="pull-right"> </span>
 							<table class="table table-hover">
+								<tr class="something">
+									<th class="col-md-9">标题</th>
+									<th class="col-md-2">发帖日期</th>
+									<th class="col-md-1">操作</th>
+								<tr>
 								<c:forEach var="ua" items="${userArticle }">
 									<tr>
 										<td>
@@ -100,10 +123,12 @@
 											<a href="${pageContext.request.contextPath }/article/details/${ua.aid}/1">
 												<c:out value="${ua.title }"></c:out>
 											</a>
-											<div style="float:right;">
-												<fmt:formatDate value="${ua.date }" pattern="MM/dd HH:mm:ss"/>
-												<button type="button" class="btn btn-primary" onclick="deleteArticle(${ua.aid})">删除</button>
-											</div>
+										</td>
+										<td>
+											<fmt:formatDate value="${ua.date }" pattern="MM/dd HH:mm:ss"/>
+										</td>
+										<td>
+											<button type="button" class="btn btn-primary" onclick="deleteArticle(${ua.aid})">删除</button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -119,6 +144,12 @@
 							<c:otherwise>
 								<h3>要审核的帖子</h3> <span id="returnMessage2" class="pull-right"> </span>
 								<table class="table table-hover">
+									<tr class="something">
+										<th class="col-md-6">标题</th>
+										<th class="col-md-2">用户名</th>
+										<th class="col-md-2">发帖日期</th>
+										<th class="col-md-2">操作</th>
+									<tr>
 									<c:forEach var="na" items="${noPassArticle }">
 										<tr>
 											<td>
@@ -126,13 +157,18 @@
 												<a>
 													<c:out value="${na.title }"></c:out>
 												</a>
-												<div style="float:right;">
-													<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-													<a href="${pageContext.request.contextPath}/user/info/${na.author.uid}">${na.author.username }</a>&nbsp; &nbsp; 
-													<fmt:formatDate value="${na.date }" pattern="MM/dd HH:mm:ss"/>
-													<button type="button" class="btn btn-primary" onclick="updateArticle(${na.aid})">通过</button>
-													<button type="button" class="btn btn-primary" onclick="deleteArticle(${na.aid})">删除</button>
-												</div>
+											</td>
+											<td>
+												<!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
+												<img alt="${na.author.username }" src="<c:url value="${na.author.headimg }"/>" class="img-circle" style="width: 19px; height: 19px;"/>
+												<a href="${pageContext.request.contextPath}/user/info/${na.author.uid}">${na.author.username }</a>&nbsp; &nbsp; 
+											</td>
+											<td>
+												<fmt:formatDate value="${na.date }" pattern="MM/dd HH:mm:ss"/>
+											</td>
+											<td>
+												<button type="button" class="btn btn-primary" onclick="updateArticle(${na.aid})">通过</button>
+												<button type="button" class="btn btn-primary" onclick="deleteArticle(${na.aid})">删除</button>
 											</td>
 										</tr>
 									</c:forEach>
@@ -143,6 +179,12 @@
 						<div>
 						<h3>要管理的帖子</h3>   <span id="returnMessage1" class="pull-right"> </span>
 						<table class="table table-hover">
+							<tr class="something">
+								<th class="col-md-5">标题</th>
+								<th class="col-md-2">用户名</th>
+								<th class="col-md-2">发帖日期</th>
+								<th class="col-md-3">操作</th>
+							<tr>
 							<c:forEach var="pa" items="${passArticle }">
 								<tr>
 									<td>
@@ -150,14 +192,19 @@
 										<a href="${pageContext.request.contextPath }/article/details/${pa.aid}/1">
 											<c:out value="${pa.title }"></c:out>
 										</a>
-										<div style="float:right;">
-											<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-											<a href="${pageContext.request.contextPath}/user/info/${pa.author.uid}">${pa.author.username }</a>&nbsp; &nbsp; 
-											<fmt:formatDate value="${pa.date }" pattern="MM/dd HH:mm:ss"/>
-											<button type="button" class="btn btn-primary" onclick="stickArticle(${pa.aid}, ${pa.status })"><c:if test="${pa.status == 1 || pa.status == 3 }">取消</c:if>置顶</button>
-											<button type="button" class="btn btn-primary" onclick="digestArticle(${pa.aid}, ${pa.status })"><c:if test="${pa.status == 2 || pa.status == 3}">取消</c:if>加精</button>
-											<button type="button" class="btn btn-primary" onclick="deleteArticle(${pa.aid})">删除</button>
-										</div>
+									</td>
+									<td>
+										<!-- <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
+										<img alt="${pa.author.username }" src="<c:url value="${pa.author.headimg }"/>" class="img-circle" style="width: 19px; height: 19px;"/>
+										<a href="${pageContext.request.contextPath}/user/info/${pa.author.uid}">${pa.author.username }</a>&nbsp; &nbsp; 
+									</td>
+									<td>
+										<fmt:formatDate value="${pa.date }" pattern="MM/dd HH:mm:ss"/>
+									</td>
+									<td>
+										<button type="button" class="btn btn-primary" onclick="stickArticle(${pa.aid}, ${pa.status })"><c:if test="${pa.status == 1 || pa.status == 3 }">取消</c:if>置顶</button>
+										<button type="button" class="btn btn-primary" onclick="digestArticle(${pa.aid}, ${pa.status })"><c:if test="${pa.status == 2 || pa.status == 3}">取消</c:if>加精</button>
+										<button type="button" class="btn btn-primary" onclick="deleteArticle(${pa.aid})">删除</button>
 									</td>
 								</tr>
 							</c:forEach>
@@ -224,6 +271,50 @@
 		      },
 		      fields: {
 		        /*验证：规则*/
+		        username: {
+	                message: '用户名不合法',
+	                validators: {
+	                    notEmpty: {
+	                        message: '用户名不能为空'
+	                    },
+	                    stringLength: {
+	                        min: 3,
+	                        max: 20,
+	                        message: '请输入3到20个字符'
+	                    },
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_\. \u4e00-\u9fa5 ]+$/,
+	                        message: '用户名只能由字母、数字、点、下划线和汉字组成 '
+	                    }
+	                }
+	            }, 
+	            phone: {
+	                message: 'The phone is not valid',
+	                validators: {
+	                    notEmpty: {
+	                        message: '手机号码不能为空'
+	                    },
+	                    stringLength: {
+	                        min: 11,
+	                        max: 11,
+	                        message: '请输入11位手机号码'
+	                    },
+	                    regexp: {
+	                        regexp: /^1[3|5|8]{1}[0-9]{9}$/,
+	                        message: '请输入正确的手机号码'
+	                    }
+	                }
+	            },
+	            email: {
+	                validators: {
+	                    notEmpty: {
+	                        message: '邮件不能为空'
+	                    },
+	                    emailAddress: {
+	                        message: '请输入正确的邮件地址如：123@qq.com'
+	                    }
+	                }
+	            }, 
 		        oldPassword: {
 		          validators: {
 		            notEmpty: {
@@ -258,7 +349,6 @@
 		              regexp: /^[^ ]+$/,
 		              message: '用户新密码不能有空格'
 		            }
-
 		          }
 		        },
 		        comfirmPassword: {
@@ -317,7 +407,7 @@
         	console.log(form.serialize());
             //发送ajax请求
             $.ajax({
-                url: '${pageContext.request.contextPath}/user/updatePassword',
+                url: '${pageContext.request.contextPath}/user/updateMessage',
                 async: false,//同步，会阻塞操作
                 type: 'POST',//PUT DELETE POST
                 data: form.serialize(),
@@ -328,11 +418,14 @@
                     console.log(data);
                     if (data.data == 0) {
                     	$("#returnMessage").hide().html('<label class="label label-danger">请重新登陆！</label>').show(300);
-                    }else if(data.data == 1) {
-                    	$("#returnMessage").hide().html('<label class="label label-danger">原密码不正确！</label>').show(300);
+                    	location.href = "${pageContext.request.contextPath}/index.jsp";
+                    }else if(data.data == 1){
+                    	$("#returnMessage").hide().html('<label class="label label-danger">用户名已存在！</label>').show(300);
                     }else if(data.data == 2) {
+                    	$("#returnMessage").hide().html('<label class="label label-danger">原密码不正确！</label>').show(300);
+                    }else if(data.data == 3) {
                     	$("#returnMessage").hide().html('<label class="label label-danger">新密码与原密码相同！</label>').show(300);
-                    }else if(data.data == 3){
+                    }else if(data.data == 4){
                     	$("#returnMessage").hide().html('<label class="label label-success">修改成功！</label>').show(300);
                     	location.href = "${pageContext.request.contextPath}/user/manager/${u.uid}";
                     }else {

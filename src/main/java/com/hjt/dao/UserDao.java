@@ -18,5 +18,5 @@ public interface UserDao {
 	public int updateHeadImg(@Param("headimg")String headImgName, 
 			@Param("uid") Integer uid);
 	
-	public int updateUserInfo(@Param("password") String password, @Param("uid") Integer uid);
+	public int updateUserInfo(@Param("username") String username, @Param("password") String password, @Param("phone") String phone, @Param("email") String email, @Param("uid") Integer uid);
 }

@@ -12,7 +12,7 @@
 	<div class="container" style="box-shadow: 0px 0px 1px #888888">
 		<%@include file="../common/head.jsp" %>
 		<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-9">
 				<div class="page-header">
 					<h4><c:out value="${article.title }"></c:out></h4>
 				</div>
@@ -180,7 +180,7 @@
 				</c:choose>
 				<span id="returnMessage" class="glyphicon"> </span>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-3">
 				<%--头像用户昵称 --%>
 				<div style="padding-top: 40px;">
 					<center>
@@ -193,7 +193,7 @@
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath }/user/manager/${user.uid }">
-									<img alt="${user.username }" src="<c:url value="${user.headimg }"/>" class="img-circle img-responsive" style="width: 224px; height: 224px;" />
+									<img alt="${user.username }" src="<c:url value="${user.headimg }"/>" class="img-circle img-responsive" style="width: 120px; height: 120px;" />
 								</a>
 								<br />用户名：${user.username }
 								<a href="<c:url value="/user/exit"/>">安全退出</a>

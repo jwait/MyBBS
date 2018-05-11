@@ -27,6 +27,10 @@
 				<c:otherwise>
 					<h3>发表过的帖子</h3>
 					<table class="table table-hover">
+						<tr class="something">
+							<th class="col-md-10">标题</th>
+							<th class="col-md-2">发帖日期</th>
+						<tr>
 						<c:forEach var="ua" items="${userArticle }">
 							<tr>
 								<td>
@@ -34,9 +38,9 @@
 									<a href="${pageContext.request.contextPath }/article/details/${ua.aid}/1">
 										<c:out value="${ua.title }"></c:out>
 									</a>
-									<div style="float:right;">
-										<fmt:formatDate value="${ua.date }" pattern="MM/dd HH:mm:ss"/>
-									</div>
+								</td>
+								<td>
+									<fmt:formatDate value="${ua.date }" pattern="MM/dd HH:mm:ss"/>
 								</td>
 							</tr>
 						</c:forEach>
