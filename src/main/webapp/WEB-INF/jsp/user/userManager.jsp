@@ -43,6 +43,15 @@
 									</button>
 								</div>
 							</div>
+							<div class="form-group">
+								<span class="col-md-2 control-label" style="font-size:16px;"><strong>修改密码</strong></span>
+								<div class="col-md-2">
+									<!-- Button trigger modal -->
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">
+									  	修改密码
+									</button>
+								</div>
+							</div>
 						</form>
 						<!-- Modal -->
 						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -57,25 +66,44 @@
 									  	  	  <div class="form-group">  
 											      <label for="username" class="col-md-3 control-label">用户名：</label>  
 											      <div class="col-md-9">  
-											          <input class="form-control" type="text" name="username" id="username" placeholder="请输入用户名" value="${user.username }">  
+											          <input class="form-control" type="text" name="username" id="username" placeholder="请输入用户名" value="${u.username }">  
 											      </div> 
 											  </div> 
 											  <div class="form-group">  
 											      <label for="phone" class="col-md-3 control-label">电话号码：</label>  
 											      <div class="col-md-9">  
-											          <input class="form-control" type="text" name="phone" id="phone" placeholder="请输入电话号码" value="${user.phone }">  
+											          <input class="form-control" type="text" name="phone" id="phone" placeholder="请输入电话号码" value="${u.phone }">  
 											      </div> 
 											  </div> 
 									  	  	  <div class="form-group">  
 											      <label for="email" class="col-md-3 control-label">邮箱：</label>  
 											      <div class="col-md-9">  
-											          <input class="form-control" type="text" name="email" id="email" placeholder="请输入邮箱" value="${user.email }">  
+											          <input class="form-control" type="text" name="email" id="email" placeholder="请输入邮箱" value="${u.email }">  
 											      </div> 
 											  </div> 
+								      	 </div>
+									     <div class="modal-footer">
+									     	<span id="returnMessage" class="glyphicon"> </span>
+									        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+									        <button id="editMessage" class="btn btn-primary" type="button">确认</button> 
+								      	 </div>
+							      	 </form>
+						    	</div>
+						  	</div>
+						</div>
+						<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+							  <div class="modal-dialog" role="document">
+								  <div class="modal-content">
+							          <div class="modal-header">
+							          	  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+								          <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+								      </div>
+								      <form id="changePassword" class="form-horizontal" method="post" action="" enctype="multipart/form-data">  
+									  	  <div class="modal-body">
 										      <div class="form-group">  
 											      <label for="oldPassword" class="col-md-3 control-label">用户旧密码：</label>  
 											      <div class="col-md-9">  
-											          <input class="form-control" type="text" name="oldPassword" id="oldPassword" placeholder="请输入旧密码">  
+											          <input class="form-control" type="password" name="oldPassword" id="oldPassword" placeholder="请输入旧密码">  
 											      </div> 
 											  </div> 
 											  <div class="form-group">  
@@ -90,12 +118,11 @@
 											          <input class="form-control" type="password" name="comfirmPassword" id="comfirmPassword" placeholder="请确认新密码">  
 											      </div> 
 											  </div> 
-								      	 
 								      	 </div>
 									     <div class="modal-footer">
-									     	<span id="returnMessage" class="glyphicon"> </span>
+									     	<span id="returnMessage4" class="glyphicon"> </span>
 									        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-									        <button id="editMessage" class="btn btn-primary" type="button">确认</button> 
+									        <button id="editPassword" class="btn btn-primary" type="button">确认</button> 
 								      	 </div>
 							      	 </form>
 						    	</div>
@@ -219,7 +246,7 @@
 			</c:when>
 			<c:otherwise>
 				<center>
-					<br><br><h3>仅能修改个人信息！</h3><br><br><br>
+					<br><br><h3>只能修改个人信息！</h3><br><br><br>
 				</center>
 			</c:otherwise>
 		</c:choose>
@@ -260,18 +287,17 @@
 	    });
 	});
 	var form = $('#changeMessage');
+	var form1 = $('#changePassword');
 	$(function() {
 		form.bootstrapValidator({
-		      message: '该值无效',
-		      trigger: 'blur keyup',
-		      feedbackIcons: {
-		        valid: 'glyphicon glyphicon-ok',
-		        invalid: 'glyphicon glyphicon-remove',
-		        validating: 'glyphicon glyphicon-refresh'
-		      },
-		      fields: {
-		        /*验证：规则*/
-		        username: {
+	        message: '输入值不合法',
+	        feedbackIcons: {
+	            valid: 'glyphicon glyphicon-ok',
+	            invalid: 'glyphicon glyphicon-remove',
+	            validating: 'glyphicon glyphicon-refresh'
+	        },
+	        fields: {
+	        	username: {
 	                message: '用户名不合法',
 	                validators: {
 	                    notEmpty: {
@@ -314,7 +340,19 @@
 	                        message: '请输入正确的邮件地址如：123@qq.com'
 	                    }
 	                }
-	            }, 
+	            }
+	        }
+	    });
+		form1.bootstrapValidator({
+		      message: '该值无效',
+		      trigger: 'blur keyup',
+		      feedbackIcons: {
+		        valid: 'glyphicon glyphicon-ok',
+		        invalid: 'glyphicon glyphicon-remove',
+		        validating: 'glyphicon glyphicon-refresh'
+		      },
+		      fields: {
+		        /*验证：规则*/
 		        oldPassword: {
 		          validators: {
 		            notEmpty: {
@@ -412,7 +450,7 @@
                 type: 'POST',//PUT DELETE POST
                 data: form.serialize(),
                 complete: function (msg) {
-                    console.log('修改成功');
+                    console.log('操作有效');
                 },
                 success: function (data) {
                     console.log(data);
@@ -421,18 +459,56 @@
                     	location.href = "${pageContext.request.contextPath}/index.jsp";
                     }else if(data.data == 1){
                     	$("#returnMessage").hide().html('<label class="label label-danger">用户名已存在！</label>').show(300);
-                    }else if(data.data == 2) {
-                    	$("#returnMessage").hide().html('<label class="label label-danger">原密码不正确！</label>').show(300);
-                    }else if(data.data == 3) {
-                    	$("#returnMessage").hide().html('<label class="label label-danger">新密码与原密码相同！</label>').show(300);
-                    }else if(data.data == 4){
+                    }else if(data.data == 2){
+                    	$("#returnMessage").hide().html('<label class="label label-danger">请至少修改一项！</label>').show(300);
+                    }else if(data.data == 3){
                     	$("#returnMessage").hide().html('<label class="label label-success">修改成功！</label>').show(300);
-                    	location.href = "${pageContext.request.contextPath}/user/manager/${u.uid}";
+                    	setTimeout(function(){
+                    		location.href = "${pageContext.request.contextPath}/user/manager/${u.uid}";
+                    	},500);
                     }else {
                         $("#returnMessage").hide().html('<label class="label label-danger">修改失败!</label>').show(300);
                     }
                 }, error: function () {
                     $("#returnMessage").hide().html('<label class="label label-danger">修改失败!</label>').show(300);
+                }
+            });
+        }
+	});
+	$("#editPassword").click(function () {//非submit按钮点击后进行验证，如果是submit则无需此句直接验证  
+		var bootstrapValidator = form1.data('bootstrapValidator');
+        //手动触发验证
+        bootstrapValidator.validate();
+        if (bootstrapValidator.isValid()) {//获取验证结果，如果成功，执行下面代码  
+        	console.log(form.serialize());
+            //发送ajax请求
+            $.ajax({
+                url: '${pageContext.request.contextPath}/user/updatePassword',
+                async: false,//同步，会阻塞操作
+                type: 'POST',//PUT DELETE POST
+                data: form1.serialize(),
+                complete: function (msg) {
+                    console.log('操作有效');
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.data == 0) {
+                    	$("#returnMessage4").hide().html('<label class="label label-danger">请重新登陆！</label>').show(300);
+                    	location.href = "${pageContext.request.contextPath}/index.jsp";
+                    }else if(data.data == 1) {
+                    	$("#returnMessage4").hide().html('<label class="label label-danger">原密码不正确！</label>').show(300);
+                    }else if(data.data == 2) {
+                    	$("#returnMessage4").hide().html('<label class="label label-danger">新密码与原密码相同！</label>').show(300);
+                    }else if(data.data == 3){
+                    	$("#returnMessage4").hide().html('<label class="label label-success">修改成功！</label>').show(300);
+                    	setTimeout(function(){
+                    		location.href = "${pageContext.request.contextPath}/user/manager/${u.uid}";
+                    	},500);
+                    }else {
+                        $("#returnMessage4").hide().html('<label class="label label-danger">修改失败!</label>').show(300);
+                    }
+                }, error: function () {
+                    $("#returnMessage4").hide().html('<label class="label label-danger">修改失败!</label>').show(300);
                 }
             });
         }

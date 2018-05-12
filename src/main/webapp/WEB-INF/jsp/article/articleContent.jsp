@@ -186,10 +186,11 @@
 					<center>
 						<c:choose>
 							<c:when test="${empty user }">
-								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle" data-toggle="modal" data-target="#myModal" />
+								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle" data-toggle="modal" data-target="#myModal" style="width: 120px; height: 120px;"/>
 								<br />
-								<br />用户名：
-								<a href="javaScript.void(0);" data-toggle="modal" data-target="#myModal">未登录</a>
+								<br />
+								<a href="#" data-toggle="modal" data-target="#myModal">登录</a>&nbsp;|
+								<a href="#" data-toggle="modal" data-target="#myModal1">注册</a>
 							</c:when>
 							<c:otherwise>
 								<a href="${pageContext.request.contextPath }/user/manager/${user.uid }">

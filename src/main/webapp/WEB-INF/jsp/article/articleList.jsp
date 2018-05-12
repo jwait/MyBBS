@@ -151,6 +151,7 @@
 							<c:forEach var="t" items="${topArticle }">
 								<tr>
 									<td>
+										<h4>
 										<span class="label label-primary">置顶</span>
 										<c:if test="${t.status eq 3 }">
 											<span class="label label-danger">精</span>
@@ -166,6 +167,7 @@
 										<c:if test="${t.status ne 1 and t.status ne 3 }">
 											<tr>
 												<td>
+													<h4>
 													<c:if test="${t.status eq 2 }">
 														<span class="label label-danger">精</span>
 													</c:if>
@@ -179,6 +181,7 @@
 									<c:forEach var="t" items="${articlePageBean.list }">
 										<tr>
 											<td>
+												<h4>
 												<c:if test="${t.status eq 2 or t.status eq 3}">
 													<span class="label label-danger">精</span>
 												</c:if>
@@ -261,7 +264,7 @@
 								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle" data-toggle="modal" data-target="#myModal" />
 								<br />
 								<br />
-								<a href="javaScript.void(0);" data-toggle="modal" data-target="#myModal">登录</a>&nbsp;|
+								<a href="#" data-toggle="modal" data-target="#myModal">登录</a>&nbsp;|
 								<a href="#" data-toggle="modal" data-target="#myModal1">注册</a>
 							</c:when>
 							<c:otherwise>

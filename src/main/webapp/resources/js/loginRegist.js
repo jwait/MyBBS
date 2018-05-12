@@ -2,7 +2,6 @@ var context = $('#context').attr('value');
 var form = $('#loginMessage');
 var form1 = $('#registMessage');
 $(function () {
-
     form.bootstrapValidator({
         message: '输入值不合法',
         feedbackIcons: {
@@ -129,7 +128,9 @@ $("#login").click(function () {
             success: function (result) {
                 console.log(result);
                 if (result) {
-                    window.location.reload();
+                	setTimeout(function(){
+                		window.location.reload();
+                	},500);
                 } else {
                     $("#returnMessage").hide().html('<label class="label label-danger">用户和密码不匹配!</label>').show(300);
                 }
@@ -141,9 +142,9 @@ $("#login").click(function () {
 });
 $("#regist").click(function () {
     //进行表单验证
-    var bv = form1.data('bootstrapValidator');
-    bv.validate();
-    if (bv.isValid()) {
+    var bv1 = form1.data('bootstrapValidator');
+    bv1.validate();
+    if (bv1.isValid()) {
         console.log(form1.serialize());
         //发送ajax请求
         $.ajax({
@@ -163,7 +164,9 @@ $("#regist").click(function () {
                 	$("#returnMessage2").hide().html('<label class="label label-danger">用户名已存在！</label>').show(300);
                 }else if(data.data == 2) {
                 	$("#returnMessage2").hide().html('<label class="label label-success">注册成功！</label>').show(300);
-                	location.href = location.href;
+                	setTimeout(function(){
+                		location.href = location.href;
+                	},500);
                 }
                 else {
                     $("#returnMessage2").hide().html('<label class="label label-danger">注册失败!</label>').show(300);

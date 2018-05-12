@@ -118,10 +118,8 @@ public class UserController {
 	@ResponseBody
 	public Map<String, Integer> updateUser(HttpSession session,
 			@RequestParam("username")String username,
-			@RequestParam("oldPassword")String oldPassword,
 			@RequestParam("phone")String phone,
-			@RequestParam("email")String email,
-			@RequestParam("newPassword")String newPassword){
+			@RequestParam("email")String email){
 		Map<String, Integer> map = new HashMap<>();
 		User user = (User) session.getAttribute("user");
 		if(user == null){
@@ -134,20 +132,48 @@ public class UserController {
 			map.put("data", 1);
 			return map;
 		}
-		if(!user.getPassword().equals(StringUtils.MD5(oldPassword))){
+		if(user.getUsername().equals(username) && user.getPhone().equals(phone) && user.getEmail().equals(email)) {
+			map.put("data", 2);
+			LogUtils.info("用户没有修改信息！");
+			return map;
+		}
+		int result = userService.updateUserInfo(username, phone, email, uid);
+		if(result > 0){
+			map.put("data", 3);
+			LogUtils.info("id为：{}的用户成功更改个人信息,用户名为{}，电话号码为{}，邮箱为{}！", uid, username, phone, email);
+		}else{
+			map.put("data", 4);
+			LogUtils.info("id为：{}修改个人信息失败！", uid);
+		}
+		return map;
+	}
+	
+	@RequestMapping(value="/updatePassword",method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Integer> updatePassword(HttpSession session,
+			@RequestParam("oldPassword")String oldPassword,
+			@RequestParam("newPassword")String newPassword){
+		Map<String, Integer> map = new HashMap<>();
+		User user = (User) session.getAttribute("user");
+		if(user == null){
+			map.put("data", 0);
+			return map;
+		}
+		int uid = user.getUid();
+		if(!userService.getUserByID(uid).getPassword().equals(StringUtils.MD5(oldPassword))){
+			map.put("data", 1);
+			return map;
+		}
+		if(oldPassword.equals(newPassword)){
 			map.put("data", 2);
 			return map;
 		}
-		if(user.getPassword().equals(StringUtils.MD5(newPassword))){
-			map.put("data", 3);
-			return map;
-		}
-		int result = userService.updateUserInfo(username, StringUtils.MD5(newPassword), phone, email, uid);
+		int result = userService.updatePassword(StringUtils.MD5(newPassword), uid);
 		if(result > 0){
-			map.put("data", 4);
-			LogUtils.info("id为：{}成功更改用户名为{}，密码为{}，电话号码为{}，邮箱为{}！", uid, username, oldPassword, phone, email);
+			map.put("data", 3);
+			LogUtils.info("id为：{}修改密码成功，旧密码为{}，新密码为{}！", uid, oldPassword, newPassword);
 		}else{
-			map.put("data", 5);
+			map.put("data", 4);
 			LogUtils.info("id为：{}更改密码失败！", uid);
 		}
 		return map;
