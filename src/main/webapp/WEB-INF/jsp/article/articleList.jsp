@@ -261,8 +261,7 @@
 					<center>
 						<c:choose>
 							<c:when test="${empty user }">
-								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle" data-toggle="modal" data-target="#myModal" />
-								<br />
+								<img src="<c:url value="/resources/imgs/head.png"/>" class="img-circle img-responsive" data-toggle="modal" data-target="#myModal" style="width: 224px; height: 224px;"/>
 								<br />
 								<a href="#" data-toggle="modal" data-target="#myModal">登录</a>&nbsp;|
 								<a href="#" data-toggle="modal" data-target="#myModal1">注册</a>
