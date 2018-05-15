@@ -327,7 +327,7 @@
 	                    },
 	                    regexp: {
 	                        regexp: /^1[3|5|8]{1}[0-9]{9}$/,
-	                        message: '请输入正确的手机号码'
+	                        message: '手机号码格式有误'
 	                    }
 	                }
 	            },
@@ -336,8 +336,9 @@
 	                    notEmpty: {
 	                        message: '邮件不能为空'
 	                    },
-	                    emailAddress: {
-	                        message: '请输入正确的邮件地址如：123@qq.com'
+	                    regexp: {
+	                        regexp: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
+	                        message: '邮箱格式有误'
 	                    }
 	                }
 	            }

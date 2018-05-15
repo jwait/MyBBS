@@ -68,7 +68,7 @@
 	     <div class="modal-footer">
 	       <span id="returnMessage2" class="glyphicon"> </span>
 	       <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-	       <button type="button" id="regist" class="btn btn-default">注册</button>
+	       <button type="button" id="regist" class="btn btn-primary">注册</button>
 	     </div>
 	     
       </form>
